@@ -10,51 +10,72 @@ namespace GUESS_NUMBER
     {
         static void Main(string[] args)
         {
-            int[] numbers = Enumerable.Range(0, 10).OrderBy(x => Guid.NewGuid()).Take(4).ToArray();
-            int numberOfGuesses = 0;
-            int a, b;
-
             Console.WriteLine("歡迎來到 1A2B 猜數字的遊戲～");
+
+
+            Random random = new Random();
+            int[] answer = new int[4];
+            for (int i = 0; i < 4; i++)
+            {
+                int num = random.Next(0, 10);
+                if (Array.IndexOf(answer, num) == -1)
+                {
+                    answer[i] = num;
+                }
+                else
+                {
+                    i--;
+                }
+                
+            }
+          foreach(int ans in answer)
+                {
+                    Console.WriteLine(ans);
+                }
 
             while (true)
             {
                 Console.Write("請輸入 4 個數字：");
-                int[] guess = Console.ReadLine().Select(c => c - '0').ToArray();
-                numberOfGuesses++;
+                string input = Console.ReadLine();
 
-                a = 0;
-                b = 0;
+                int A = 0;
+                int B = 0;
                 for (int i = 0; i < 4; i++)
                 {
-                    if (guess[i] == numbers[i])
+                    int num = input[i] - '0';
+                    if (Array.IndexOf(answer, num) != -1)
                     {
-                        a++;
-                    }
-                    else if (numbers.Contains(guess[i]))
-                    {
-                        b++;
+                        if (answer[i] == num)
+                        {
+                            A++;
+                        }
+                        else
+                        {
+                            B++;
+                        }
                     }
                 }
 
-                if (a == 4)
+                Console.WriteLine("判定結果是 " + A + "A" + B + "B");
+                Console.WriteLine("------");
+                if (A == 4)
                 {
-                    Console.WriteLine("恭喜，您猜對了！");
-                    Console.Write("您要繼續玩嗎？(y/n): ");
-                    string answer = Console.ReadLine();
-                    if (answer == "n")
-                    {
-                        Console.WriteLine("遊戲結束，下次再來玩喔～");
-                        break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"判斷結果是{a}A{b}B");
+                    Console.WriteLine("恭喜你！猜對了！！");
+                    break;
                 }
 
             }
-            Console.ReadKey();
 
+            Console.Write("你要繼續玩嗎？(y/n): ");
+            string playAgain = Console.ReadLine();
+            if (playAgain.ToLower() == "n")
+            {
+                Console.WriteLine("遊戲結束，下次再來玩喔～");
+            }
+            else
+            {
+                Main(null);
+            }
         }
     }
 }
